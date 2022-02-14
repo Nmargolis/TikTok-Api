@@ -228,7 +228,8 @@ class TikTokApi:
 
         if self.proxy is not None:
             proxy = self.proxy
-
+        print('hello im actually in get_data, custom_verifyFp:', kwargs.get("custom_verifyFp"))
+        print('kwargs in general:', kwargs)
         if kwargs.get("custom_verifyFp") == None:
             if self.custom_verifyFp != None:
                 verifyFp = self.custom_verifyFp
@@ -386,6 +387,7 @@ class TikTokApi:
             "custom_device_id",
             "".join(random.choice(string.digits) for num in range(19)),
         )
+        print('hello im in get_cookies, custom verfiyfp:', kwargs.get("custom_verifyFp"))
         if kwargs.get("custom_verifyFp") == None:
             if self.custom_verifyFp != None:
                 verifyFp = self.custom_verifyFp
@@ -661,7 +663,7 @@ class TikTokApi:
             api_url = "{}api/post/item_list/?{}&{}".format(
                 BASE_URL, self.__add_url_params__(), urlencode(query)
             )
-
+            print('hello im in get_data')
             res = self.get_data(url=api_url, send_tt_params=True, **kwargs)
 
             if "itemList" in res.keys():
@@ -689,6 +691,7 @@ class TikTokApi:
 
             Note: seems to only support up to ~2,000
         """
+        print('hello im in by_username')
         (
             region,
             language,
@@ -699,6 +702,7 @@ class TikTokApi:
         kwargs["custom_device_id"] = device_id
         data = self.get_user_object(username, **kwargs)
         # print('data', data)
+        print('hello im getting user_posts')
         return self.user_posts(
             data["id"],
             data["secUid"],
@@ -1317,6 +1321,7 @@ class TikTokApi:
             maxCount,
             device_id,
         ) = self.__process_kwargs__(kwargs)
+        print('hello im in get_user')
         r = requests.get(
             "https://tiktok.com/@{}?lang=en".format(quote(username)),
             headers={
@@ -1352,7 +1357,7 @@ class TikTokApi:
         user = list(user_data["UserModule"]["users"].values())[0]
 
 
-
+        print('hello im returning user')
         return user
 
     def get_video_by_tiktok(self, data, **kwargs) -> bytes:

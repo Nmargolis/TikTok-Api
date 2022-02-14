@@ -187,11 +187,12 @@ class browser(BrowserInterface):
 
         if calc_tt_params:
             page.route(re.compile(r"(\.png)|(\.jpeg)|(\.mp4)|(x-expire)"), process)
+            print('hello im going to redbull')
             page.goto(
                 kwargs.get("default_url", "https://www.tiktok.com/@redbull"),
                 wait_until="load",
             )
-
+            print('hello im done going to redbull?')
         verifyFp = "".join(
             random.choice(
                 string.ascii_lowercase + string.ascii_uppercase + string.digits
@@ -214,7 +215,7 @@ class browser(BrowserInterface):
             device_id = self.device_id
 
         url = "{}&verifyFp={}&device_id={}".format(url, verifyFp, device_id)
-
+        print('hello im adding script tag')
         page.add_script_tag(content=get_acrawler())
         evaluatedPage = page.evaluate(
             '''() => {
