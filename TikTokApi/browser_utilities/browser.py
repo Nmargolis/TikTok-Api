@@ -199,7 +199,7 @@ class browser(BrowserInterface):
             try:
                 page.goto(
                     kwargs.get("default_url", "https://www.tiktok.com/@redbull"),
-                    wait_until="networkidle",
+                    wait_until="domcontentloaded",
                 )
                 print('hello im done waiting')
             except Exception as e:
