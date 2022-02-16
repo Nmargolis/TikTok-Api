@@ -187,7 +187,7 @@ class browser(BrowserInterface):
         tt_params = None
         context = self._create_context()
         page = context.new_page()
-        print('contexts', len(self.browser.contexts()))
+        print('contexts', len(self.browser.contexts))
         print('pages', context.pages)
 
         if calc_tt_params:
