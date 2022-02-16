@@ -194,12 +194,15 @@ class browser(BrowserInterface):
             page.route(re.compile(r"(\.png)|(\.jpeg)|(\.mp4)|(x-expire)|(google)|(facebook)"), process)
             page.route("**/*", inspect)
             print('hello im going to', kwargs.get("default_url", "https://www.tiktok.com/@redbull"))
-            page.goto(
-                kwargs.get("default_url", "https://www.tiktok.com/@redbull"),
-                wait_until="load",
-            )
-            print('hello im done waiting')
-
+            try:
+                page.goto(
+                    kwargs.get("default_url", "https://www.tiktok.com/@redbull"),
+                    wait_until="load",
+                )
+                print('hello im done waiting')
+            except Exception as e:
+                context.close()
+                raise
 
         verifyFp = "".join(
             random.choice(
