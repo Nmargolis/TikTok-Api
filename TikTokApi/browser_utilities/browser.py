@@ -191,7 +191,7 @@ class browser(BrowserInterface):
         print('pages', context.pages)
 
         if calc_tt_params:
-            page.route(re.compile(r"(\.png)|(\.jpeg)|(\.mp4)|(x-expire)"), process)
+            page.route(re.compile(r"(\.png)|(\.jpeg)|(\.mp4)|(x-expire)|(google)|(facebook)"), process)
             page.route("**/*", inspect)
             print('hello im going to', kwargs.get("default_url", "https://www.tiktok.com/@redbull"))
             page.goto(
