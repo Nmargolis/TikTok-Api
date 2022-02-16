@@ -203,6 +203,7 @@ class browser(BrowserInterface):
                 )
                 print('hello im done waiting')
             except Exception as e:
+                print('caught exception, closing context')
                 context.close()
                 raise
 
