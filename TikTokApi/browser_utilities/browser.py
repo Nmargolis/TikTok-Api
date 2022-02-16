@@ -120,6 +120,7 @@ class browser(BrowserInterface):
         self.height = page.evaluate("""() => { return screen.height; }""")
 
     def _create_context(self, set_useragent=False):
+        print('hello im creating context')
         iphone = playwright.devices["iPhone 11 Pro"]
         iphone["viewport"] = {
             "width": random.randint(320, 1920),
@@ -176,18 +177,24 @@ class browser(BrowserInterface):
 
     def sign_url(self, url, calc_tt_params=False, **kwargs):
         def process(route):
+            print(f'aborting route {route}')
             route.abort()
 
         tt_params = None
         context = self._create_context()
         page = context.new_page()
+        print('contexts', self.browser.contexts)
+        print('pages', context.pages)
 
         if calc_tt_params:
             page.route(re.compile(r"(\.png)|(\.jpeg)|(\.mp4)|(x-expire)"), process)
+            print('hello im going to', kwargs.get("default_url", "https://www.tiktok.com/@redbull"))
             page.goto(
                 kwargs.get("default_url", "https://www.tiktok.com/@redbull"),
                 wait_until="load",
             )
+            print('hello im done waiting')
+
 
         verifyFp = "".join(
             random.choice(
@@ -211,8 +218,9 @@ class browser(BrowserInterface):
             device_id = self.device_id
 
         url = "{}&verifyFp={}&device_id={}".format(url, verifyFp, device_id)
-
+        print('hello im adding script tag')
         page.add_script_tag(content=_get_acrawler())
+        print('hello im evaluating page')
         evaluatedPage = page.evaluate(
             '''() => {
             var url = "'''
@@ -228,7 +236,7 @@ class browser(BrowserInterface):
 
         if calc_tt_params:
             page.add_script_tag(content=_get_tt_params_script())
-
+            print('hello im calcuating tt params, evaluating page again')
             tt_params = page.evaluate(
                 """() => {
                     return window.genXTTParams("""
@@ -237,7 +245,7 @@ class browser(BrowserInterface):
             
                 }"""
             )
-
+        print('hello im closing context')
         context.close()
         return (verifyFp, device_id, evaluatedPage, tt_params)
 

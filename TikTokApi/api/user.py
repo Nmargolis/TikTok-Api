@@ -126,6 +126,7 @@ class User:
             # do something
         ```
         """
+        print('hello im in User.videos')
         processed = User.parent._process_kwargs(kwargs)
         kwargs["custom_device_id"] = processed.device_id
 
@@ -151,12 +152,13 @@ class User:
             path = "api/post/item_list/?{}&{}".format(
                 User.parent._add_url_params(), urlencode(query)
             )
-
+            print('hello im calling get_data')
             res = User.parent.get_data(path, send_tt_params=True, **kwargs)
-
+            # print('res', res)
             videos = res.get("itemList", [])
             amount_yielded += len(videos)
             for video in videos:
+                # print('video', video)
                 yield self.parent.video(data=video)
 
             if not res.get("hasMore", False) and not first:
