@@ -364,6 +364,7 @@ class TikTokApi:
 
     def __del__(self):
         """A basic cleanup method, called automatically from the code"""
+        print('hello im cleaning up')
         try:
             self._browser._clean_up()
         except Exception:
