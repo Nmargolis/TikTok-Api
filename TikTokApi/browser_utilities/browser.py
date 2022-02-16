@@ -182,12 +182,8 @@ class browser(BrowserInterface):
 
         def inspect(route):
             print('hello im in inspect')
-            if re.compile(r"(\.png)|(\.jpeg)|(\.mp4)|(x-expire)|(googleads)|(facebook)").test(route):
-                print(f'aborting route {route}')
-                route.abort()
-            else:
-                print(f'continuing route {route}')
-                route.continue_()
+            print(f'continuing route {route}')
+            route.continue_()
 
         tt_params = None
         context = self._create_context()
@@ -196,8 +192,8 @@ class browser(BrowserInterface):
         print('pages', context.pages)
 
         if calc_tt_params:
-            page.route("**/*", inspect)
-            # page.route(re.compile(r"(\.png)|(\.jpeg)|(\.mp4)|(x-expire)|(googleads)|(facebook)"), process)
+            # page.route("**/*", inspect)
+            page.route(re.compile(r"(\.png)|(\.jpeg)|(\.mp4)|(x-expire)|(googleads)|(facebook)"), process)
 
             print('hello im going to', kwargs.get("default_url", "https://www.tiktok.com/@redbull"))
             try:
