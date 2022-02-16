@@ -181,8 +181,8 @@ class browser(BrowserInterface):
             route.abort()
 
         def inspect(route):
-            print(f'inspecting {route}')
-            route.continue()
+            print(f'continuing route {route}')
+            route.continue_()
 
         tt_params = None
         context = self._create_context()
