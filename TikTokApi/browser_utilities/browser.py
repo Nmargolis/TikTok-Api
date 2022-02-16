@@ -183,6 +183,7 @@ class browser(BrowserInterface):
         def inspect(route):
             if re.compile(r"(\.png)|(\.jpeg)|(\.mp4)|(x-expire)|(google)|(facebook)").test(route):
                 print(f'aborting route {route}')
+                route.abort()
             else:
                 print(f'continuing route {route}')
                 route.continue_()
