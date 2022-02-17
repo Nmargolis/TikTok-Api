@@ -120,7 +120,6 @@ class browser(BrowserInterface):
         self.height = page.evaluate("""() => { return screen.height; }""")
 
     def _create_context(self, set_useragent=False):
-        print('hello im creating context')
         iphone = playwright.devices["iPhone 11 Pro"]
         iphone["viewport"] = {
             "width": random.randint(320, 1920),
@@ -180,32 +179,22 @@ class browser(BrowserInterface):
             print(f'aborting route {route}')
             route.abort()
 
-        def inspect(route):
-            print('hello im in inspect')
-            print(f'continuing route {route}')
-            route.continue_()
-
         tt_params = None
         context = self._create_context()
         page = context.new_page()
-        print('contexts', len(self.browser.contexts))
-        print('pages', context.pages)
+        logger.log('context count', len(self.browser.contexts))
 
         if calc_tt_params:
-            # page.route("**/*", inspect)
             page.route(re.compile(r"(\.png)|(\.jpeg)|(\.mp4)|(x-expire)|(googleads)|(facebook)"), process)
-
-            print('hello im going to', kwargs.get("default_url", "https://www.tiktok.com/@redbull"))
             try:
                 page.goto(
                     kwargs.get("default_url", "https://www.tiktok.com/@redbull"),
                     wait_until="domcontentloaded",
                 )
-                print('hello im done waiting')
             except Exception as e:
-                print('caught exception, closing context')
-                context.close()
-                raise
+                logger.exception('error in goto for calculating tt params')
+                self.browser.close()
+                raise e
 
         verifyFp = "".join(
             random.choice(
@@ -229,34 +218,40 @@ class browser(BrowserInterface):
             device_id = self.device_id
 
         url = "{}&verifyFp={}&device_id={}".format(url, verifyFp, device_id)
-        print('hello im adding script tag')
-        page.add_script_tag(content=_get_acrawler())
-        print('hello im evaluating page')
-        evaluatedPage = page.evaluate(
-            '''() => {
-            var url = "'''
-            + url
-            + """"
-            var token = window.byted_acrawler.sign({url: url});
-            
-            return token;
-            }"""
-        )
+        try:
+            page.add_script_tag(content=_get_acrawler())
+            evaluatedPage = page.evaluate(
+                '''() => {
+                var url = "'''
+                + url
+                + """"
+                var token = window.byted_acrawler.sign({url: url});
+                
+                return token;
+                }"""
+            )
+        except Exception as e:
+            logger.exception('error adding crawler')
+            context.close()
+            raise e
 
         url = "{}&_signature={}".format(url, evaluatedPage)
 
         if calc_tt_params:
-            page.add_script_tag(content=_get_tt_params_script())
-            print('hello im calcuating tt params, evaluating page again')
-            tt_params = page.evaluate(
-                """() => {
-                    return window.genXTTParams("""
-                + json.dumps(dict(parse_qsl(urlparse(url).query)))
-                + """);
-            
-                }"""
-            )
-        print('hello im closing context')
+            try:
+                page.add_script_tag(content=_get_tt_params_script())
+                tt_params = page.evaluate(
+                    """() => {
+                        return window.genXTTParams("""
+                    + json.dumps(dict(parse_qsl(urlparse(url).query)))
+                    + """);
+                
+                    }"""
+                )
+            except Exception as e:
+                logger.exception('error getting tt params')
+                context.close()
+                raise e
         context.close()
         return (verifyFp, device_id, evaluatedPage, tt_params)
 
