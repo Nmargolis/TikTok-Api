@@ -176,13 +176,13 @@ class browser(BrowserInterface):
 
     def sign_url(self, url, calc_tt_params=False, **kwargs):
         def process(route):
-            print(f'aborting route {route}')
+            logger.info(f'aborting route {route}')
             route.abort()
 
         tt_params = None
         context = self._create_context()
         page = context.new_page()
-        logger.log('context count', len(self.browser.contexts))
+        logger.info('context count', len(self.browser.contexts))
 
         if calc_tt_params:
             page.route(re.compile(r"(\.png)|(\.jpeg)|(\.mp4)|(x-expire)|(googleads)|(facebook)"), process)
