@@ -189,7 +189,7 @@ class browser(BrowserInterface):
             page.route(re.compile(r"(\.png)|(\.jpeg)|(\.mp4)|(x-expire)"), process)
             page.goto(
                 kwargs.get("default_url", "https://www.tiktok.com/@redbull"),
-                wait_until="load",
+                wait_until="domcontentloaded",
             )
 
         verifyFp = "".join(
