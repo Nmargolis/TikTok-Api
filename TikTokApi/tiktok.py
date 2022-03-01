@@ -211,7 +211,7 @@ class TikTokApi:
 
         tt_params = None
         send_tt_params = kwargs.get("send_tt_params", False)
-
+        print('hello send_tt_params is', send_tt_params)
         full_url = f"https://{subdomain}.tiktok.com/" + path
 
         if self._signer_url is None:

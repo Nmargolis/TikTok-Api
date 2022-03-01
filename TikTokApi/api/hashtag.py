@@ -76,7 +76,7 @@ class Hashtag:
             self.parent._add_url_params(), urlencode(query)
         )
 
-        data = self.parent.get_data(path, **kwargs)
+        data = self.parent.get_data(path, subdomain='us', **kwargs)
 
         if data["challengeInfo"].get("challenge") is None:
             raise TikTokNotFoundError("Challenge {} does not exist".format(self.name))
