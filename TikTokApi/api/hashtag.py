@@ -114,8 +114,8 @@ class Hashtag:
             path = "api/challenge/item_list/?{}&{}".format(
                 self.parent._add_url_params(), urlencode(query)
             )
-            # Note: send_tt_params doesnt need to be True, but it doesn't hurt
-            res = self.parent.get_data(path, send_tt_params=True, subdomain='us', **kwargs)
+
+            res = self.parent.get_data(path, subdomain='us', **kwargs)
 
             for result in res.get("itemList", []):
                 yield self.parent.video(data=result)

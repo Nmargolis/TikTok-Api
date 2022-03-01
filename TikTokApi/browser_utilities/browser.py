@@ -221,6 +221,7 @@ class browser(BrowserInterface):
         url = "{}&verifyFp={}&device_id={}&msToken={}".format(url, verifyFp, device_id, msToken)
         try:
             page.add_script_tag(content=_get_acrawler())
+            print('ok - added script tag')
             evaluatedPage = page.evaluate(
                 '''() => {
                 var url = "'''
