@@ -288,10 +288,11 @@ class TikTokApi:
                 or parsed_data.get("verifyConfig", {}).get("type", "") == "verify"
             ):
                 self.logger.error(
-                    "Tiktok wants to display a captcha.\nResponse:\n%s\nCookies:\n%s\nURL:\n%s",
+                    "Tiktok wants to display a captcha.\nResponse:\n%s\nCookies:\n%s\nURL:\n%s\nHeaders:\n%s\n",
                     r.text,
                     self._get_cookies(**kwargs),
                     url,
+                    headers
                 )
                 raise TikTokCaptchaError()
 
@@ -431,7 +432,6 @@ class TikTokApi:
             verifyFp = kwargs.get("custom_verify_fp")
 
         if kwargs.get("force_verify_fp_on_cookie_header", False):
-            print('force_verfiy_fp_on_cookie_header is present')
             return {
                 "tt_webid": device_id,
                 "tt_webid_v2": device_id,
