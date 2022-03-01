@@ -217,11 +217,13 @@ class browser(BrowserInterface):
         else:
             device_id = self.device_id
         msToken = kwargs.get('custom_ms_token')
+        print('hello im in sign_url, msToken is', msToken)
 
         url = "{}&verifyFp={}&device_id={}&msToken={}".format(url, verifyFp, device_id, msToken)
         try:
+            print('hello im adding script tag')
             page.add_script_tag(content=_get_acrawler())
-            print('ok - added script tag')
+            print('hello im done adding script tag, url is', url)
             evaluatedPage = page.evaluate(
                 '''() => {
                 var url = "'''
