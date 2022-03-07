@@ -195,9 +195,10 @@ class TikTokApi:
         kwargs["custom_device_id"] = processed.device_id
         kwargs["custom_ms_token"] = self._custom_ms_token
 
+        print(f'hello im delaying {self._request_delay} seconds')
         if self._request_delay is not None:
             time.sleep(self._request_delay)
-
+        print(f'hello im done delaying')
         if self._proxy is not None:
             proxy = self._proxy
 

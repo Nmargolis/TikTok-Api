@@ -223,7 +223,7 @@ class browser(BrowserInterface):
         try:
             print('hello im adding script tag')
             page.add_script_tag(content=_get_acrawler())
-            print('hello im done adding script tag, url is', url)
+            print('hello im done adding script tag')
             evaluatedPage = page.evaluate(
                 '''() => {
                 var url = "'''
