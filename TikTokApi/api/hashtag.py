@@ -71,13 +71,13 @@ class Hashtag:
         else:
             self.parent.logger.warning("Malformed Hashtag Object")
             return {}
-
+        print('hello im getting info_full')
         path = "api/challenge/detail/?{}&{}".format(
             self.parent._add_url_params(), urlencode(query)
         )
 
         data = self.parent.get_data(path, subdomain='us', **kwargs)
-
+        print('hello im printing info full data', data)
         if data["challengeInfo"].get("challenge") is None:
             raise TikTokNotFoundError("Challenge {} does not exist".format(self.name))
 
@@ -106,6 +106,7 @@ class Hashtag:
         page_size = 30
 
         while cursor - offset < count:
+            print('hello im getting a batch of videos')
             query = {
                 "count": page_size,
                 "challengeID": self.id,

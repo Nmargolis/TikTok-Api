@@ -242,6 +242,7 @@ class browser(BrowserInterface):
         url = "{}&_signature={}".format(url, evaluatedPage)
 
         if calc_tt_params:
+            print('hello im adding get tt params script')
             try:
                 page.add_script_tag(content=_get_tt_params_script())
                 tt_params = page.evaluate(

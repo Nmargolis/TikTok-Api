@@ -217,6 +217,7 @@ class TikTokApi:
 
         if self._signer_url is None:
             kwargs["custom_verify_fp"] = verifyFp
+            print('hello im in get_data, calling sign_url')
             verify_fp, device_id, signature, tt_params = self._browser.sign_url(
                 full_url, calc_tt_params=send_tt_params, **kwargs
             )
@@ -269,15 +270,18 @@ class TikTokApi:
             "sec-fetch-site": "none",
             "sec-gpc": "1",
             "user-agent": user_agent,
-            "x-secsdk-csrf-token": csrf_token,
-            "x-tt-params": tt_params,
+            "x-secsdk-csrf-token": csrf_token
         }
+        if tt_params:
+            headers['x-tt-params'] = tt_params
 
-        self.logger.info(f"GET: %s\n\theaders: %s", url, headers)
+        cookies = self._get_cookies(**kwargs)
+        self.logger.info(f"GET: %s\n\theaders: %s\n\tcookies: %s", url, headers, cookies)
+        print('hello im in get_data making tiktok request, url')
         r = requests.get(
             url,
             headers=headers,
-            cookies=self._get_cookies(**kwargs),
+            cookies=cookies,
             proxies=self._format_proxy(processed.proxy),
             **self._requests_extra_kwargs,
         )
@@ -339,7 +343,7 @@ class TikTokApi:
                 "undefined": "MEDIA_ERROR",
             }
             statusCode = parsed_data.get("statusCode", 0)
-            self.logger.info(f"TikTok Returned: %s", json)
+            self.logger.info(f"TikTok Returned: %s", statusCode)
             if statusCode == 10201:
                 # Invalid Entity
                 raise TikTokNotFoundError(
@@ -443,7 +447,7 @@ class TikTokApi:
                 ),
                 "s_v_web_id": verifyFp,
                 "ttwid": kwargs.get("ttwid"),
-                "msToken": kwargs.get("custom_ms_token")
+                # "msToken": kwargs.get("custom_ms_token")
             }
         else:
             return {
@@ -455,7 +459,7 @@ class TikTokApi:
                     for i in range(16)
                 ),
                 "ttwid": kwargs.get("ttwid"),
-                "msToken": kwargs.get("custom_ms_token")
+                # "msToken": kwargs.get("custom_ms_token")
             }
 
     def get_bytes(self, **kwargs) -> bytes:
@@ -464,6 +468,7 @@ class TikTokApi:
         kwargs["custom_device_id"] = processed.device_id
         kwargs["custom_ms_token"] = self._custom_ms_token
         if self._signer_url is None:
+            print('hello im in get_bytes calling sign_url')
             verify_fp, device_id, signature, _ = self._browser.sign_url(
                 calc_tt_params=False, **kwargs
             )
@@ -481,6 +486,7 @@ class TikTokApi:
             )
         query = {"verifyFp": verify_fp, "_signature": signature}
         url = "{}&{}".format(kwargs["url"], urlencode(query))
+        print('hello im in get_bytes making tiktok request')
         r = requests.get(
             url,
             headers={
