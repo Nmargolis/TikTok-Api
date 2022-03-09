@@ -219,7 +219,7 @@ class browser(BrowserInterface):
         msToken = kwargs.get('custom_ms_token')
         print('hello im in sign_url, msToken is', msToken)
 
-        url = "{}&verifyFp={}&device_id={}&msToken={}".format(url, verifyFp, device_id, msToken)
+        url = "{}&verifyFp={}&device_id={}".format(url, verifyFp, device_id)
         page.on("console", lambda msg: print(msg.text))
         try:
             print('hello im adding script tag')
