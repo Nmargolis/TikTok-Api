@@ -220,6 +220,7 @@ class browser(BrowserInterface):
         print('hello im in sign_url, msToken is', msToken)
 
         url = "{}&verifyFp={}&device_id={}&msToken={}".format(url, verifyFp, device_id, msToken)
+        page.on("console", lambda msg: print(msg.text))
         try:
             print('hello im adding script tag')
             page.add_script_tag(content=_get_acrawler())
@@ -229,11 +230,13 @@ class browser(BrowserInterface):
                 var url = "'''
                 + url
                 + """"
+                console.log('hello im evaluating url', url);
                 var token = window.byted_acrawler.sign({url: url});
-
+                console.log('hello token is ', token);
                 return token;
                 }"""
             )
+            print('hello evaluatedPage is', evaluatedPage)
         except Exception as e:
             logger.exception('error adding crawler')
             context.close()
