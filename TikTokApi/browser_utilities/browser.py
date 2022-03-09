@@ -225,17 +225,13 @@ class browser(BrowserInterface):
             print('hello im adding script tag')
             page.add_script_tag(content=_get_acrawler())
             print('hello im done adding script tag')
-            evaluatedPage = page.evaluate(
-                '''() => {
-                var url = "'''
-                + url
-                + """"
-                console.log('hello im evaluating url', url);
+            evaluatedPage = page.evaluate('''(url) => {
+                console.log("url", url);
                 var token = window.byted_acrawler.sign({url: url});
-                console.log('hello token is ', token);
+                console.log("token", token);
                 return token;
-                }"""
-            )
+                }
+                ''', url)
             print('hello evaluatedPage is', evaluatedPage)
         except Exception as e:
             logger.exception('error adding crawler')
