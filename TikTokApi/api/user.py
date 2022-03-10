@@ -105,7 +105,6 @@ class User:
         if not (user and user["props"]):
             print("helo im in info_full, issue with user:", user)
         user_props = user["props"]["pageProps"]
-        print('hello, user_props is', user_props)
         if user_props["statusCode"] == 404 or user_props["serverCode"] == 404:
             raise TikTokNotFoundError(
                 "TikTok user with username {} does not exist".format(self.username)
