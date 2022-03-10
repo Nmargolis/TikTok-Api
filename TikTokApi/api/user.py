@@ -155,7 +155,7 @@ class User:
                 User.parent._add_url_params(), urlencode(query)
             )
 
-            res = User.parent.get_data(path, send_tt_params=True, **kwargs)
+            res = User.parent.get_data(path, send_tt_params=True, subdomain='us', **kwargs)
             videos = res.get("itemList", [])
             amount_yielded += len(videos)
             for video in videos:
