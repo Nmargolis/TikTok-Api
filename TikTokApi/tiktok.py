@@ -577,4 +577,4 @@ class TikTokApi:
             "msToken": self._custom_ms_token
         }
 
-        return urlencode(query)
+        return urlencode(query, safe='=')
