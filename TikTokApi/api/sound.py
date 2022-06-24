@@ -64,6 +64,7 @@ class Sound:
         sound_data = api.sound(id='7016547803243022337').info()
         ```
         """
+        self.__ensure_valid()
         if use_html:
             return self.info_full(**kwargs)["musicInfo"]
 
@@ -74,7 +75,7 @@ class Sound:
         res = self.parent.get_data(path, **kwargs)
 
         if res.get("statusCode", 200) == 10203:
-            raise TikTokNotFoundError()
+            raise NotFoundException()
 
         return res["musicInfo"]["music"]
 
@@ -90,6 +91,7 @@ class Sound:
         sound_data = api.sound(id='7016547803243022337').info_full()
         ```
         """
+        self.__ensure_valid()
         r = requests.get(
             "https://www.tiktok.com/music/-{}".format(self.id),
             headers={
@@ -120,6 +122,7 @@ class Sound:
             # do something
         ```
         """
+        self.__ensure_valid()
         processed = self.parent._process_kwargs(kwargs)
         kwargs["custom_device_id"] = processed.device_id
 
@@ -155,7 +158,10 @@ class Sound:
         print('hello im extracting data, keys are', self.as_dict.keys())
         data = self.as_dict
         keys = data.keys()
-        print('hello im about to check authorName')
+
+        if data.get("id") == "":
+            self.id = ""
+
         if "authorName" in keys:
             print('authorName is in keys')
             self.id = data["id"]
@@ -172,6 +178,10 @@ class Sound:
             Sound.parent.logger.error(
                 f"Failed to create Sound with data: {data}\nwhich has keys {data.keys()}"
             )
+
+    def __ensure_valid(self):
+        if self.id == "":
+            raise SoundRemovedException("This sound has been removed!")
 
     def __repr__(self):
         return self.__str__()
