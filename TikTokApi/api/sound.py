@@ -42,7 +42,6 @@ class Sound:
         """
         if data is not None:
             self.as_dict = data
-            print('hello im in Sound, extracting from data')
             self.__extract_from_data()
         elif id is None:
             raise TypeError("You must provide id parameter.")
@@ -155,7 +154,6 @@ class Sound:
             cursor = int(res["cursor"])
 
     def __extract_from_data(self):
-        print('hello im extracting data, keys are', self.as_dict.keys())
         data = self.as_dict
         keys = data.keys()
 
@@ -163,18 +161,16 @@ class Sound:
             self.id = ""
 
         if "authorName" in keys:
-            print('authorName is in keys')
             self.id = data["id"]
             self.title = data["title"]
 
             if data["authorName"] is not None:
                 self.author = self.parent.user(username=data["authorName"])
-        print('hello i made it here')
+
         self.id = data.get("id")
         self.title = data.get("title")
 
         if self.id is None:
-            print('hello self.id is None')
             Sound.parent.logger.error(
                 f"Failed to create Sound with data: {data}\nwhich has keys {data.keys()}"
             )
@@ -190,7 +186,6 @@ class Sound:
         return f"TikTokApi.sound(id='{self.id}')"
 
     def __getattr__(self, name):
-        print('hello im getting name', name)
         if name in ["title", "author", "as_dict"]:
             self.as_dict = self.info()
             self.__extract_from_data()

@@ -115,14 +115,12 @@ class Video:
     def __extract_from_data(self) -> None:
         data = self.as_dict
         keys = data.keys()
-        print('hello im in extract_from_data, keys are', keys)
 
         if "author" in keys:
             self.id = data["id"]
             self.create_time = datetime.fromtimestamp(data["createTime"])
             self.stats = data["stats"]
             self.author = self.parent.user(data=data["author"])
-            print('hello im getting sound from data["music"]', data["music"])
             self.sound = self.parent.sound(data=data["music"])
 
             self.hashtags = [
