@@ -8,8 +8,64 @@ This is an unofficial api wrapper for TikTok.com in python. With this api you ar
 ## Sponsors
 These sponsors have paid to be placed here and beyond that I do not have any affiliation with them, the TikTokAPI package will always be free and open-source. If you wish to be a sponsor of this project check out my [GitHub sponsors page](https://github.com/sponsors/davidteather).
 
-[![TikAPI](https://raw.githubusercontent.com/davidteather/TikTok-Api/master/imgs/logo128.png)](https://tikapi.io/?ref=davidteather)   |  **[TikAPI](https://tikapi.io/?ref=davidteather)** is a paid TikTok API service providing an full out-of-the-box solution for developers, trusted by 100+ companies. [Learn more](https://tikapi.io/?ref=davidteather)
-:-------------------------:|:-------------------------:
+<div align="center">
+    <p>
+    <a href="https://tikapi.io/?ref=davidteather" target="_blank">
+			<div>
+				<img src="https://raw.githubusercontent.com/davidteather/TikTok-Api/master/imgs/logo128.png" width="100" alt="TikApi">
+			</div>
+			<b></b>
+			<div>
+				TikApi is a paid TikTok API service providing an full out-of-the-box solution for developers, trusted by 100+ companies.
+			</div>
+		</a>
+    </p>
+</div>
+
+<br>
+
+<div align="center">
+    <p>
+    <a href="https://trendpop.social/?ref=github-davidteather-tiktokapi" target="_blank">
+			<div>
+				<img src="https://raw.githubusercontent.com/davidteather/TikTok-Api/master/imgs/trendpop.png" width="100" alt="Trendpop">
+			</div>
+			<div>
+				Trendpop builds software to help creators and businesses go viral on social video platforms.
+			</div>
+            <div>
+                <sub>
+                    Excited about building in this space?
+                    <a href="https://trendpop.social/careers?ref=github-davidteather-tiktokapi">
+                        <sub>We're hiring engineers across all roles</sub>
+                    </a>
+                    <a href="https://trendpop.social/careers?ref=github-davidteather-tiktokapi" target="_blank">
+                    <sub>- shoot us a message at </sub>
+                    </a>
+                    <a href="mailto:founders@trendpop.social" target="_blank">
+                    <sub><code>founders@trendpop.social</code></sub>
+                    </a>
+                </sub>
+            </div>
+		</a>
+    </p>
+</div>
+
+<br>
+
+<div align="center">
+    <p>
+    <a href="https://influencerhunters.com/docs.html?utm_source=github&utm_medium=githubpage&utm_campaign=david_thea_github&utm_id=david_t" target="_blank">
+			<div>
+				<img src="https://raw.githubusercontent.com/andrearama/TikTok-Api/master/imgs/IH_LOGO.png" width="100" alt="IH_logo">
+			</div>
+			<b></b>
+			<div>
+				TikTok data through APIs, providing 10+ Million posts / day to the largest Marketing and Social listening platforms.
+			</div>
+		</a>
+    </p>
+</div>
 
 ## Table of Contents
 - [Documentation](#documentation)
@@ -43,7 +99,9 @@ If you run into an issue please check the closed issues on the github, although 
 pip install TikTokApi
 python -m playwright install
 ```
-If you would prefer a video walk through of setting up this package I created a currently semi-outdated [YouTube video](https://www.youtube.com/watch?v=-uCt1x8kINQ) just for that.
+If you would prefer a video walk through of setting up this package [YouTube video](https://www.youtube.com/watch?v=-uCt1x8kINQ) just for that.
+
+If you want a quick video to listen for [TikTok Live](https://www.youtube.com/watch?v=307ijmA3_lc) events in python.
 
 #### Docker Installation
 
@@ -70,16 +128,14 @@ Here's a quick bit of code to get the most recent trending videos on TikTok. The
 ```py
 from TikTokApi import TikTokApi
 
-# In your web browser you will need to go to TikTok, check the cookies 
-# and under www.tiktok.com s_v_web_id should exist, and use that value
-# as input to custom_verify_fp
-# Or watch https://www.youtube.com/watch?v=-uCt1x8kINQ for a visual
-api = TikTokApi(custom_verify_fp="")
-
-for trending_video in api.trending.videos(count=50):
-    # Prints the author's username of the trending video.
-    print(trending_video.author.username)
+# Watch https://www.youtube.com/watch?v=-uCt1x8kINQ for a brief setup tutorial
+with TikTokApi() as api:
+    for trending_video in api.trending.videos(count=50):
+        # Prints the author's username of the trending video.
+        print(trending_video.author.username)
 ```
+
+**Note**: Jupyter (ipynb) only works on linux, see [microsoft/playwright-python #178](https://github.com/microsoft/playwright-python/issues/178)
 
 To run the example scripts from the repository root, make sure you use the `-m` option on python.
 ```sh
@@ -125,10 +181,10 @@ Here's a few more examples that help illustrate the differences in the flow of t
 api = TikTokApi.get_instance()
 trending_videos = api.by_trending()
 
-#V5
-api = TikTokApi() # .get_instance no longer exists
-for trending_video in api.trending.videos():
-    # do something
+#V5.1
+with TikTokApi() as api: # .get_instance no longer exists
+    for trending_video in api.trending.videos():
+        # do something
 ```
 
 Where in V4 you had to extract information yourself, the package now handles that for you. So it's much easier to do chained related function calls.
