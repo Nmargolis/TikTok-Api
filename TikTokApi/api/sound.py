@@ -63,6 +63,7 @@ class Sound:
         sound_data = api.sound(id='7016547803243022337').info()
         ```
         """
+        self.__ensure_valid()
         if use_html:
             return self.info_full(**kwargs)["musicInfo"]
 
@@ -73,7 +74,7 @@ class Sound:
         res = self.parent.get_data(path, **kwargs)
 
         if res.get("statusCode", 200) == 10203:
-            raise TikTokNotFoundError()
+            raise NotFoundException()
 
         return res["musicInfo"]["music"]
 
@@ -89,6 +90,7 @@ class Sound:
         sound_data = api.sound(id='7016547803243022337').info_full()
         ```
         """
+        self.__ensure_valid()
         r = requests.get(
             "https://www.tiktok.com/music/-{}".format(self.id),
             headers={
@@ -119,6 +121,7 @@ class Sound:
             # do something
         ```
         """
+        self.__ensure_valid()
         processed = self.parent._process_kwargs(kwargs)
         kwargs["custom_device_id"] = processed.device_id
 
@@ -154,17 +157,27 @@ class Sound:
         data = self.as_dict
         keys = data.keys()
 
+        if data.get("id") == "":
+            self.id = ""
+
         if "authorName" in keys:
             self.id = data["id"]
             self.title = data["title"]
 
-            if data.get("authorName") is not None:
+            if data["authorName"] is not None:
                 self.author = self.parent.user(username=data["authorName"])
+
+        self.id = data.get("id")
+        self.title = data.get("title")
 
         if self.id is None:
             Sound.parent.logger.error(
                 f"Failed to create Sound with data: {data}\nwhich has keys {data.keys()}"
             )
+
+    def __ensure_valid(self):
+        if self.id == "":
+            raise SoundRemovedException("This sound has been removed!")
 
     def __repr__(self):
         return self.__str__()
@@ -178,4 +191,4 @@ class Sound:
             self.__extract_from_data()
             return self.__getattribute__(name)
 
-        raise AttributeError(f"{name} doesn't exist on TikTokApi.api.Sound")
+        # raise AttributeError(f"{name} doesn't exist on TikTokApi.api.Sound")
