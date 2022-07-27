@@ -159,10 +159,8 @@ class User:
         while amount_yielded < count:
             query = {
                 "count": 30,
-                "id": self.user_id,
                 "cursor": cursor,
                 "type": 1,
-                "secUid": self.sec_uid,
                 "sourceType": 8,
                 "appId": 1233,
                 "region": processed.region,
